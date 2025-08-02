@@ -74,6 +74,14 @@ pub fn prepare_ffmpeg_windows(deps_path: &Path) {
     .unwrap();
 }
 
+pub fn prepare_onevpl_windows(deps_path: &Path) {
+    command::download_and_extract_zip(
+        "https://github.com/oneapi-src/oneVPL/releases/download/v2023.3.1/oneVPL-intel-gpu-2023.3.1-windows-x64.zip",
+        &deps_path.join("onevpl"),
+    )
+    .unwrap();
+}
+
 pub fn prepare_windows_deps(skip_admin_priv: bool) {
     let sh = Shell::new().unwrap();
 
@@ -91,6 +99,7 @@ pub fn prepare_windows_deps(skip_admin_priv: bool) {
 
     prepare_x264_windows(&deps_path);
     prepare_ffmpeg_windows(&deps_path);
+    prepare_onevpl_windows(&deps_path);
 }
 
 pub fn prepare_linux_deps(enable_nvenc: bool) {

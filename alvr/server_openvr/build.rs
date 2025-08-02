@@ -74,6 +74,14 @@ fn main() {
             .define("_WINSOCKAPI_", None)
             .define("_MBCS", None)
             .define("_MT", None);
+
+        let onevpl_path = alvr_filesystem::deps_dir().join("windows/onevpl");
+        build.include(onevpl_path.join("include"));
+        println!(
+            "cargo:rustc-link-search=native={}",
+            onevpl_path.join("lib").to_string_lossy()
+        );
+        println!("cargo:rustc-link-lib=vpl");
     } else if platform_name == "macos" {
         build.define("__APPLE__", None);
     }

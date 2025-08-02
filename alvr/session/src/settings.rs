@@ -161,6 +161,16 @@ Temporal: Helps improve overall encoding quality, very small trade-off in speed.
 
 #[derive(SettingsSchema, Serialize, Deserialize, Clone, PartialEq)]
 #[schema(collapsible)]
+pub struct QsvConfig {
+    #[schema(gui(slider(min = 1, max = 7)))]
+    #[schema(flag = "steamvr-restart")]
+    pub target_usage: u32,
+    #[schema(flag = "steamvr-restart")]
+    pub rate_control_mode: RateControlMode,
+}
+
+#[derive(SettingsSchema, Serialize, Deserialize, Clone, PartialEq)]
+#[schema(collapsible)]
 pub struct AmfConfig {
     #[schema(
         strings(
@@ -294,6 +304,11 @@ CABAC produces better compression but it's significantly slower and may lead to 
     #[schema(strings(display_name = "NVENC"))]
     #[schema(flag = "steamvr-restart")]
     pub nvenc: NvencConfig,
+
+    #[cfg_attr(not(target_os = "windows"), schema(flag = "hidden"))]
+    #[schema(strings(display_name = "QSV"))]
+    #[schema(flag = "steamvr-restart")]
+    pub qsv: QsvConfig,
 
     #[cfg_attr(not(target_os = "windows"), schema(flag = "hidden"))]
     #[schema(strings(display_name = "AMF"))]
@@ -1736,6 +1751,13 @@ pub fn session_settings_default() -> SettingsDefault {
                     rc_max_bitrate: -1,
                     rc_average_bitrate: -1,
                     enable_weighted_prediction: false,
+                },
+                qsv: QsvConfigDefault {
+                    gui_collapsed: true,
+                    target_usage: 4,
+                    rate_control_mode: RateControlModeDefault {
+                        variant: RateControlModeDefaultVariant::Cbr,
+                    },
                 },
                 quality_preset: EncoderQualityPresetDefault {
                     variant: EncoderQualityPresetDefaultVariant::Speed,
