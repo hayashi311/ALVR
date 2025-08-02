@@ -82,6 +82,8 @@ void Settings::Load() {
         m_nvencQualityPreset = (uint32_t)config.get("nvenc_quality_preset").get<int64_t>();
         m_force_sw_encoding = config.get("force_sw_encoding").get<bool>();
         m_swThreadCount = (int32_t)config.get("sw_thread_count").get<int64_t>();
+        m_qsvTargetUsage = (uint32_t)config.get("qsv_target_usage").get<int64_t>();
+        m_qsvRateControlMode = (uint32_t)config.get("qsv_rate_control_mode").get<int64_t>();
 
         m_nvencTuningPreset = (uint32_t)config.get("nvenc_tuning_preset").get<int64_t>();
         m_nvencMultiPass = (uint32_t)config.get("nvenc_multi_pass").get<int64_t>();

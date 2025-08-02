@@ -96,6 +96,8 @@ pub struct OpenvrConfig {
     pub rc_max_bitrate: i64,
     pub rc_average_bitrate: i64,
     pub nvenc_enable_weighted_prediction: bool,
+    pub qsv_target_usage: u32,
+    pub qsv_rate_control_mode: u32,
     pub capture_frame_dir: String,
     pub amd_bitrate_corruption_fix: bool,
     pub use_separate_hand_trackers: bool,

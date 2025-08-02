@@ -1,4 +1,5 @@
 #include "CEncoder.h"
+#include "VideoEncoderQSV.h"
 
 CEncoder::CEncoder()
     : m_bExiting(false)
@@ -19,6 +20,7 @@ void CEncoder::Initialize(std::shared_ptr<CD3DRender> d3dRender) {
     uint32_t encoderWidth, encoderHeight;
     m_FrameRender->GetEncodingResolution(&encoderWidth, &encoderHeight);
 
+    Exception qsvException;
     Exception vceException;
     Exception nvencException;
 #ifdef ALVR_GPL
@@ -36,6 +38,14 @@ void CEncoder::Initialize(std::shared_ptr<CD3DRender> d3dRender) {
     }
 #endif
 
+    try {
+        Debug("Try to use VideoEncoderQSV.\n");
+        m_videoEncoder = std::make_shared<VideoEncoderQSV>(d3dRender, encoderWidth, encoderHeight);
+        m_videoEncoder->Initialize();
+        return;
+    } catch (Exception e) {
+        qsvException = e;
+    }
     try {
         Debug("Try to use VideoEncoderAMF.\n");
         m_videoEncoder = std::make_shared<VideoEncoderAMF>(d3dRender, encoderWidth, encoderHeight);
@@ -63,14 +73,16 @@ void CEncoder::Initialize(std::shared_ptr<CD3DRender> d3dRender) {
         swException = e;
     }
     throw MakeException(
-        "All VideoEncoder are not available. VCE: %s, NVENC: %s, SW: %s",
+        "All VideoEncoder are not available. QSV: %s, VCE: %s, NVENC: %s, SW: %s",
+        qsvException.what(),
         vceException.what(),
         nvencException.what(),
         swException.what()
     );
 #else
     throw MakeException(
-        "All VideoEncoder are not available. VCE: %s, NVENC: %s",
+        "All VideoEncoder are not available. QSV: %s, VCE: %s, NVENC: %s",
+        qsvException.what(),
         vceException.what(),
         nvencException.what()
     );

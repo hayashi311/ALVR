@@ -150,6 +150,7 @@ pub fn contruct_openvr_config(session: &SessionConfig) -> OpenvrConfig {
     };
 
     let nvenc_overrides = settings.video.encoder_config.nvenc;
+    let qsv_controls = settings.video.encoder_config.qsv;
     let amf_controls = settings.video.encoder_config.amf;
     let hdr_controls = settings.video.encoder_config.hdr;
 
@@ -215,6 +216,8 @@ pub fn contruct_openvr_config(session: &SessionConfig) -> OpenvrConfig {
         rc_max_bitrate: nvenc_overrides.rc_max_bitrate,
         rc_average_bitrate: nvenc_overrides.rc_average_bitrate,
         nvenc_enable_weighted_prediction: nvenc_overrides.enable_weighted_prediction,
+        qsv_target_usage: qsv_controls.target_usage as u32,
+        qsv_rate_control_mode: qsv_controls.rate_control_mode as u32,
         capture_frame_dir: settings.extra.capture.capture_frame_dir,
         amd_bitrate_corruption_fix: settings.video.bitrate.image_corruption_fix,
         use_separate_hand_trackers,
